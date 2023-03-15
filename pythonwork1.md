@@ -1,1 +1,2 @@
 # coding2-pythonwork1
+In this python project, I first crop the images from the selected image library to the same size and then import them. Randomize the 14th image and change its color channels. A new image is created by averaging the pixels. Use matplotlib and numpy to change the images to arrays for better data handling. Check for differences between outputs by changing and adjusting the variable output chart. A histogram of the difference between the original image and the average image is built and then normalized. Finally, create a Gaussian curve.
