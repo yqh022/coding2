@@ -1,1 +1,2 @@
-# coding2
+# coding2-pythonwork2
+For this task, I learned how to learn how to make a machine learn to work with images.  I extracted images from wikimedia and referenced them.  I choose one image as the image I want to change and the other image as the style image, and the neural network learns to change the style of the first image to the style of the second image.  The neural network uses gradient descent to optimize the parameters.  We first normalize the dataset using its mean and standard deviation, looking for smaller error measures by following the negative side of the gradient.
