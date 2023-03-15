@@ -268,3 +268,199 @@ public:
 #endif
 
 ```
+## main.cpp
+```ruby
+#include "ofMain.h"
+#include "testApp.h"
+
+//========================================================================
+int main( ){
+
+    ofSetupOpenGL(1024,768, OF_WINDOW);            // <-------- setup the GL context
+
+    // this kicks off the running of my app
+    // can be OF_WINDOW or OF_FULLSCREEN
+    // pass in width and height too:
+    ofRunApp( new testApp());
+
+}
+```
+## miniboid.cpp
+```ruby
+//
+//  miniboid.cpp
+//  mySketch-week3-1
+//
+// 
+//
+
+#include "miniboid.hpp"
+
+miniboid::miniboid()
+{
+    separationWeight = 1.2f;
+    cohesionWeight = 1.2f;
+    alignmentWeight = 0.2f;
+    
+    separationThreshold = 30;
+    neighbourhoodSize = 80;
+    
+    position = ofVec3f(ofRandom(0, 200), ofRandom(0, 200));
+    velocity = ofVec3f(ofRandom(-2, 2), ofRandom(-2, 2));
+}
+
+void miniboid::draw(){
+    ofSetColor(87, 76, 87);
+    ofCircle(position.x, position.y, 10);
+}
+
+```
+## miniboid.hpp
+```ruby
+/
+//  miniboid.hpp
+//  mySketch-week3-1
+//
+//  
+//
+
+#ifndef miniboid_hpp
+#define miniboid_hpp
+
+#include <stdio.h>
+#include "boid.h"
+
+
+class miniboid : public Boid {
+public:
+    miniboid();
+    void draw();
+};
+
+#endif /* miniboid_hpp */
+
+```
+## testApp.cpp
+```ruby
+#include "testApp.h"
+
+testApp::~testApp()
+{
+	for (int i = 0; i < boids.size(); i++)
+	{
+		delete boids[i];
+	}
+}
+
+//--------------------------------------------------------------
+void testApp::setup(){
+	
+	
+	int screenW = ofGetScreenWidth();
+	int screenH = ofGetScreenHeight();
+
+	ofBackground(247, 217, 76);
+	
+	// set up the boids
+	for (int i = 0; i < 50; i++)
+    {
+        boids.push_back(new miniboid());
+        boids.push_back(new Boid());
+    }
+
+}
+
+
+//--------------------------------------------------------------
+void testApp::update(){
+	
+    ofVec3f min(0, 0);
+	ofVec3f max(ofGetWidth(), ofGetHeight());
+	for (int i = 0; i < boids.size(); i++)
+	{
+		boids[i]->update(boids, min, max);
+	}
+}
+
+//--------------------------------------------------------------
+void testApp::draw(){
+
+	for (int i = 0; i < boids.size(); i++)
+	{
+		boids[i]->draw();
+	}
+
+}
+
+
+//--------------------------------------------------------------
+void testApp::keyPressed(int key){
+ 
+}
+
+//--------------------------------------------------------------
+void testApp::keyReleased(int key){
+    
+}
+
+//--------------------------------------------------------------
+void testApp::mouseMoved(int x, int y ){
+    
+}
+
+//--------------------------------------------------------------
+void testApp::mouseDragged(int x, int y, int button){
+    
+}
+
+//--------------------------------------------------------------
+void testApp::mousePressed(int x, int y, int button){
+	
+}
+
+//--------------------------------------------------------------
+void testApp::mouseReleased(int x, int y, int button){
+    
+}
+
+//--------------------------------------------------------------
+void testApp::windowResized(int w, int h){
+    
+}
+
+```
+## testApp.h
+```ruby
+#ifndef _TEST_APP
+#define _TEST_APP
+
+
+#include "ofMain.h"
+#include <vector>
+#include "boid.h"
+#include "miniboid.hpp"
+
+class testApp : public ofBaseApp{
+	
+public:
+    ~testApp();
+	
+    void setup();
+    void update();
+    void draw();
+    
+    void keyPressed(int key);
+    void keyReleased(int key);
+    void mouseMoved(int x, int y );
+    void mouseDragged(int x, int y, int button);
+    void mousePressed(int x, int y, int button);
+    void mouseReleased(int x, int y, int button);
+    void windowResized(int w, int h);
+
+    std::vector<Boid *> boids;
+	
+};
+
+#endif	
+
+```
