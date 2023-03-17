@@ -69,18 +69,15 @@ void ofApp::setup(){
  
     ofDisableArbTex();
 
-    //this makes sure that the back of the model doesn't show through the front
     ofEnableDepthTest();
 
-    //now we load our model
+
     model.loadModel("model/ABPK-Veins.3ds");
 
     model.setPosition(ofGetWidth()*.5, ofGetHeight() * 0.05, 30);
 
     light.enable();
     light.setPosition(model.getPosition() + glm::vec3(0, 0, 200));
-    
-    //this slows down the rotate a little bit
     dampen = .4;
 }
 
@@ -90,12 +87,10 @@ void ofApp::update(){
         sensorValue = "Arduino Error";
     }
     else {
-        //While statement looping through serial messages when serial is being provided.
+
         while (serial.available() > 0) {
             //byte data is being writen into byteData as int.
             byteData = serial.readByte();
-        
-            //byteData is converted into a string for drawing later.
             sensorValue = "value: " + ofToString(byteData);
         }
     }
@@ -117,31 +112,20 @@ void ofApp::draw(){
     ofBackground(210, 195, 241);
     
     
-    //translate so that 0,0 is the center of the screen
+
     ofPushMatrix();
     ofTranslate(ofGetWidth()/2, ofGetHeight()/2, 40);
 
     auto axis = glm::axis(curRot);
-    //apply the quaternion's rotation to the viewport and draw the sphere
+ 
     ofRotateDeg(ofRadToDeg(glm::angle(curRot)), axis.x, axis.y, axis.z);
-    /// You can actually use the folling line instead, just showing this other option as example
-    ///    ofRotateRad(glm::angle(curRot), axis.x, axis.y, axis.z);
+   
     
    
     ofSetColor(245,229,215);
     //ofDrawCone(60, 80, 100, 30, 60);
     //ofDrawCone(160, 80, 100, 30, 60);
     ofDrawSphere(0, 0, 0, 240-timeValue);
-   
-    for (int x=1; x<20; x++){
-        for (int i=0; i<900; i+=5){
-            
-            ofSetColor(127+127*sin(i *0.01 +time), 127+127*sin(i*0.011 +time), 127+127*sin(i*0.012 +time+x));
-           // ofDrawCircle(ofGetWidth()/2+100*sin(i*0.01+time), 50+i, 50+40*sin(i*0.005+time));
-            //ofDrawCone(50*x + 100*tan(i *0.01 + time +x), 50+i, 50+40*sin(i*0.005 + time),10);
-        }
-    }
-  
 
     
     cam.begin();
@@ -197,11 +181,8 @@ void ofApp::draw(){
     
     
     ofSetColor(200, 20, 25,30);
-
-    //first let's just draw the model with the model object
     //drawWithModel();
 
-    //then we'll learn how to draw it manually so that we have more control over the data
     drawWithMesh();
     
     
@@ -273,7 +254,7 @@ void ofApp::drawWithMesh(){
     //draw the model manually
     if(bHasTexture) texture.bind();
     material.begin();
-    //mesh.drawWireframe(); //you can draw wireframe too
+    //mesh.drawWireframe(); 
     mesh.drawFaces();
     material.end();
     if(bHasTexture) texture.unbind();
@@ -288,7 +269,6 @@ void ofApp::audioIn(ofSoundBuffer& input){
     for (size_t i = 0; i < input.getNumFrames(); i++)
     {
         
-        // handle input here
     }
 }
 //--------------------------------------------------------------
@@ -307,7 +287,6 @@ void ofApp::audioOut(ofSoundBuffer& output){
         output[i * outChannels] = osc1.sinewave(myFreq+(osc2.sinewave(0.2))) * 0.5 + myOut/2;
         output[i * outChannels + 1] = output[i * outChannels];
         
-        //Hold the values so the draw method can draw them
         waveform[waveIndex] =  output[i * outChannels];
         if (waveIndex < (ofGetWidth() - 1)) {
             ++waveIndex;
@@ -469,7 +448,7 @@ void loop()
 {
   sensorValue = analogRead(sensorPin);
   char inByte = 0;
-  // if we get a valid byte, read analog ins:
+ 
   if (Serial.available() > 0) {
     // get incoming byte:
     inByte = Serial.read();
