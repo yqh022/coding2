@@ -143,6 +143,7 @@ void ofApp::drawWithMesh(){
 ```
 every time the mouse is dragged, track the change
 accumulate the changes inside of curRot through multiplication
+
 ```ruby
 void ofApp::mouseDragged(int x, int y, int button){
     glm::vec2 mouse(x,y);
