@@ -34,3 +34,49 @@ ofDisableArbTex();
     light.enable();
     light.setPosition(model.getPosition() + glm::vec3(0, 0, 200));
  ```
+ Sound visualization
+ ```ruby
+ofDrawRectangle(0, 1, 1,waveform[2] * ofGetHeight()/1.); //first line
+    for(int i = 1; i < (ofGetHeight() + 1); ++i) {
+        ofDrawRectangle(i, waveform[i] * ofGetHeight()/10., i + 1, waveform[i+1] * ofGetHeight()/10.,waveform[i+2] * ofGetHeight()/20.);
+    }
+```
+Controls the movement and rotation of the cones
+```ruby
+cam.begin();
+
+    for(int i = 0; i < boxCount; i++) {
+        ofPushMatrix();
+
+        float t = (ofGetElapsedTimef() + i * spacing) * movementSpeed;
+        glm::vec3 pos(
+            ofSignedNoise(t, 0, 0),
+            ofSignedNoise(0, t, 0),
+            ofSignedNoise(0, 0, t));
+
+        float boxSize = maxBoxSize * ofNoise(pos.x, pos.y, pos.z);
+
+        pos *= cloudSize;
+        ofTranslate(pos);
+        ofRotateXDeg(pos.y);
+        ofRotateYDeg(pos.x);
+        ofRotateZDeg(pos.z);
+
+        ofLogo.bind();
+        ofNoFill();
+        ofSetColor(timeValue,timeValue,255,100);
+        ofDrawCone(boxSize/3, timeValue, 10, 20, 20);
+        ofLogo.unbind();
+
+        ofNoFill();
+        ofSetColor(ofColor::fromHsb(cosf(t) * 128 + 128, 255, 255));
+        //ofDrawSphere(boxSize * 1.1f/2, boxSize * 1.1f/2, 20);
+
+        ofPopMatrix();
+    }
+
+    cam.end();
+    
+    
+    ofPopMatrix();
+```
