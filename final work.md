@@ -12,9 +12,24 @@ Setup Sound
     myClock.setTicksPerBeat(4);
     mySample.load(ofToDataPath("lizi.wav"));
 ```
+Connecting ports to Arduino serial devices
 ```ruby
  serial.listDevices();
     vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
     int baud = 9600;
     serial.setup("/dev/cu.usbmodem14201", baud);
 ```
+```ruby
+ofDisableArbTex();
+
+    //this makes sure that the back of the model doesn't show through the front
+    ofEnableDepthTest();
+
+    //now we load our model
+    model.loadModel("model/ABPK-Veins.3ds");
+
+    model.setPosition(ofGetWidth()*.5, ofGetHeight() * 0.05, 30);
+
+    light.enable();
+    light.setPosition(model.getPosition() + glm::vec3(0, 0, 200));
+ ```
