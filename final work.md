@@ -131,15 +131,24 @@ void ofApp::drawWithMesh(){
         verts[i].z += ofSignedNoise(verts[i].y/liquidness, verts[i].z/liquidness,verts[i].x/liquidness, ofGetElapsedTimef()/speedDampen)*amplitude;
     }
 
-    //draw the model manually
     if(bHasTexture) texture.bind();
     material.begin();
-    //mesh.drawWireframe(); //you can draw wireframe too
     mesh.drawFaces();
     material.end();
     if(bHasTexture) texture.unbind();
 
     ofPopMatrix();
 
+}
+```
+every time the mouse is dragged, track the change
+accumulate the changes inside of curRot through multiplication
+```ruby
+void ofApp::mouseDragged(int x, int y, int button){
+    glm::vec2 mouse(x,y);
+    glm::quat yRot = glm::angleAxis(ofDegToRad(x-lastMouse.x)*dampen, glm::vec3(0,1,0));
+    glm::quat xRot = glm::angleAxis(ofDegToRad(y-lastMouse.y)*dampen, glm::vec3(-1,0,0));
+    curRot = xRot * yRot * curRot;
+    lastMouse = mouse;
 }
 ```
