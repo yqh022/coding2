@@ -19,6 +19,7 @@ Connecting ports to Arduino serial devices
     int baud = 9600;
     serial.setup("/dev/cu.usbmodem14201", baud);
 ```
+Loading models, using model textures
 ```ruby
 ofDisableArbTex();
 
