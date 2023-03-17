@@ -80,3 +80,66 @@ cam.begin();
     
     ofPopMatrix();
 ```
+get the position of the model，save the current view，restore the view position，get the model attributes，
+```ruby
+void ofApp::drawWithModel(){
+
+    glm::vec3 position = model.getPosition();
+    ofPushMatrix();
+    ofTranslate(position);
+    ofRotateDeg(-ofGetMouseX(), 0, 1, 0);
+    ofRotateDeg(90,1,0,0);
+    ofTranslate(-position);
+    model.drawFaces();
+    ofPopMatrix();
+}
+
+void ofApp::drawWithMesh(){
+    glm::vec3 scale = model.getScale();
+    glm::vec3 position = model.getPosition();
+    float normalizedScale = model.getNormalizedScale();
+    ofVboMesh mesh = model.getMesh(0);
+    ofTexture texture;
+    ofxAssimpMeshHelper& meshHelper = model.getMeshHelper( 0 );
+    bool bHasTexture = meshHelper.hasTexture();
+    if( bHasTexture ) {
+        texture = model.getTextureForMesh(0);
+    }
+
+    ofMaterial material = model.getMaterialForMesh(0);
+
+    ofPushMatrix();
+
+    //translate and scale based on the positioning.
+    ofTranslate(position);
+    ofRotateDeg(-ofGetMouseX(), 0, 1, 0);
+    ofRotateDeg(90,1,0,0);
+
+
+    ofScale(normalizedScale, normalizedScale, normalizedScale);
+    ofScale(scale.x,scale.y,scale.z);
+
+    //modify mesh with some noise
+    float liquidness = 5;
+    float amplitude = mouseY/100.0;
+    float speedDampen = 5;
+    auto &verts = mesh.getVertices();
+
+    for(unsigned int i = 0; i < verts.size(); i++){
+        verts[i].x += ofSignedNoise(verts[i].x/liquidness, verts[i].y/liquidness,verts[i].z/liquidness, ofGetElapsedTimef()/speedDampen)*amplitude;
+        verts[i].y += ofSignedNoise(verts[i].z/liquidness, verts[i].x/liquidness,verts[i].y/liquidness, ofGetElapsedTimef()/speedDampen)*amplitude;
+        verts[i].z += ofSignedNoise(verts[i].y/liquidness, verts[i].z/liquidness,verts[i].x/liquidness, ofGetElapsedTimef()/speedDampen)*amplitude;
+    }
+
+    //draw the model manually
+    if(bHasTexture) texture.bind();
+    material.begin();
+    //mesh.drawWireframe(); //you can draw wireframe too
+    mesh.drawFaces();
+    material.end();
+    if(bHasTexture) texture.unbind();
+
+    ofPopMatrix();
+
+}
+```
